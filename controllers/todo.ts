@@ -52,4 +52,35 @@ export default {
       data,
     };
   },
+  /**
+   * @description Get todo by id
+   * @route GET todos/:id
+   */
+  getTodoById: ({
+    params,
+    response,
+  }: {
+    params: { id: string };
+    response: any;
+  }) => {
+    const todo: Todo | undefined = todos.find((t) => {
+      return t.id === params.id;
+    });
+
+    if (!todo) {
+      response.status = 404;
+      response.body = {
+        success: false,
+        message: 'No todo found',
+      };
+      return;
+    }
+
+    // If todo is found
+    response.status = 200;
+    response.body = {
+      success: true,
+      data: todo,
+    };
+  },
 };
