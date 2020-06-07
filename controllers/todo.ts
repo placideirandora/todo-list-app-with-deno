@@ -83,4 +83,39 @@ export default {
       data: todo,
     };
   },
+  /**
+   * @description Update todo by id
+   * @route PUT todos/:id
+   */
+  updateTodoById: async ({
+    params,
+    request,
+    response,
+  }: {
+    params: { id: string };
+    request: any;
+    response: any;
+  }) => {
+    const todo: Todo | undefined = todos.find((t) => t.id === params.id);
+    if (!todo) {
+      response.status = 404;
+      response.body = {
+        success: false,
+        message: 'No todo found',
+      };
+      return;
+    }
+
+    // if todo found then update todo
+    const body = await request.body();
+    const updatedData: { todo?: string; isCompleted?: boolean } = body.value;
+    let newTodos = todos.map((t) => {
+      return t.id === params.id ? { ...t, ...updatedData } : t;
+    });
+    response.status = 200;
+    response.body = {
+      success: true,
+      data: newTodos,
+    };
+  },
 };
