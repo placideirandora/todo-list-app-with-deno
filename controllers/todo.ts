@@ -118,4 +118,35 @@ export default {
       data: newTodos,
     };
   },
+  /**
+   * @description Delete todo by id
+   * @route DELETE todos/:id
+   */
+  deleteTodoById: ({
+    params,
+    response,
+  }: {
+    params: { id: string };
+    response: any;
+  }) => {
+    const todo: Todo | undefined = todos.find((t) => t.id === params.id);
+    if (!todo) {
+      response.status = 404;
+      response.body = {
+        success: false,
+        message: 'No todo found',
+      };
+      return;
+    }
+
+    const allTodos = todos.filter((t) => t.id !== params.id);
+
+    // remove the todo w.r.t id and return
+    // remaining todos
+    response.status = 200;
+    response.body = {
+      success: true,
+      data: allTodos,
+    };
+  },
 };
